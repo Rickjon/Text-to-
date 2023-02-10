@@ -1,0 +1,30 @@
+import java.io.File;
+import java.io.IOException;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import marytts.LocalMaryInterface;
+import marytts.MaryInterface;
+import marytts.exceptions.MaryConfigurationException;
+import marytts.exceptions.SynthesisException;
+import marytts.util.data.audio.AudioPlayer;
+
+public class TextToSpeech {
+    public static void main(String[] args) {
+        try {
+            MaryInterface mary = new LocalMaryInterface();
+            String text = "Hello, this is a sample text for text-to-speech conversion.";
+
+            AudioInputStream audio = mary.generateAudio(text);
+            AudioFormat format = audio.getFormat();
+            File file = new File("output.mp3");
+            AudioSystem.write(audio, AudioFileFormat.Type.MP3, file);
+            System.out.println("MP3 file saved to " + file.getAbsolutePath());
+        } catch (MaryConfigurationException | SynthesisException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
